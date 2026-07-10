@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>유럽상품1팀 인솔자 출장비 계산기</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E%E2%9C%88%EF%B8%8F%3C/text%3E%3C/svg%3E">
   <style>
     * {
       box-sizing: border-box;
@@ -20,7 +21,7 @@
       width: 100%;
       max-width: 820px;
       margin: 0 auto;
-      padding: 28px 18px 40px;
+      padding: 56px 18px 40px;
     }
 
     .header {
@@ -34,6 +35,12 @@
       margin: 0 0 18px;
       line-height: 1.2;
       letter-spacing: -0.04em;
+    }
+
+    .title-logo {
+      display: inline-block;
+      margin-right: 8px;
+      transform: translateY(-1px);
     }
 
     .version {
@@ -114,6 +121,11 @@
       align-items: center;
       margin: 22px 0 20px;
       flex-wrap: wrap;
+    }
+
+    .message-button-row {
+      display: none;
+      margin: 16px 0 20px;
     }
 
     button {
@@ -255,7 +267,7 @@
 
     @media (max-width: 640px) {
       .page {
-        padding: 22px 14px 32px;
+        padding: 42px 14px 32px;
       }
 
       .header h1 {
@@ -279,8 +291,8 @@
 <body>
   <main class="page">
     <header class="header">
-      <h1>유럽상품1팀 인솔자 출장비 계산기</h1>
-      <div class="version">ver 1.1.1.0</div>
+      <h1><span class="title-logo">✈️</span>유럽상품1팀 인솔자 출장비 계산기</h1>
+      <div class="version">ver 1.1.1.1</div>
       <hr class="divider" />
     </header>
 
@@ -348,14 +360,17 @@
 
       <div class="button-row">
         <button class="primary-button" type="button" onclick="calculate()">계산하기</button>
-        <button id="messageFormButton" class="secondary-button" type="button" onclick="showMessageForm()" style="display:none;">
-          인솔자 쪽지 양식 작성
-        </button>
       </div>
 
       <section id="resultSection" class="result-section">
         <h2 class="section-title">계산 결과</h2>
         <div id="resultBox" class="result-box"></div>
+
+        <div id="messageButtonRow" class="message-button-row">
+          <button id="messageFormButton" class="secondary-button" type="button" onclick="showMessageForm()">
+            인솔자 쪽지 양식 작성
+          </button>
+        </div>
       </section>
 
       <section id="messageForm" class="message-form">
@@ -401,13 +416,14 @@
     </section>
 
     <details>
-      <summary>ver 1.1.1.0 패치노트 보기</summary>
+      <summary>ver 1.1.1.1 패치노트 보기</summary>
       <div class="patch-note">1. 기존 로딩이 필요했던 PYTHON 환경이 아닌, HTML 환경에서 구동됩니다.
 2. 패치노트를 최하단에 추가했습니다.
 3. 발칸 계산 방식을 적용하는 법을 자동에서 수동으로 변경했습니다.
 4. 인센티브 계산 식을 추가했습니다.
 5. 인솔자 쪽지 내에 퀸투어 직불금 관련 내용을 추가할 수 있게 변경했습니다.
-6. 기타 비주얼 업데이트들을 적용했습니다.
+6. 비행기 로고가 생겼습니다.
+7. 기타 비주얼 업데이트들을 적용했습니다.
         
 오늘도 화이팅입니당:D </div>
     </details>
@@ -417,6 +433,8 @@
     let calculationFormulaText = "";
     let lastProductCode = "";
     let generatedMessageText = "";
+
+    const messageDivider = "============================================================";
 
     const methodColors = {
       "일반": "#111111",
@@ -734,7 +752,7 @@
       if (validationError) {
         showError(validationError);
         document.getElementById("resultSection").style.display = "none";
-        document.getElementById("messageFormButton").style.display = "none";
+        document.getElementById("messageButtonRow").style.display = "none";
         document.getElementById("messageForm").style.display = "none";
         document.getElementById("successMessage").style.display = "none";
         document.getElementById("messageOutputSection").style.display = "none";
@@ -802,7 +820,7 @@
 
       document.getElementById("resultBox").innerHTML = resultHtml;
       document.getElementById("resultSection").style.display = "block";
-      document.getElementById("messageFormButton").style.display = "inline-block";
+      document.getElementById("messageButtonRow").style.display = "block";
 
       document.getElementById("messageForm").style.display = "none";
       document.getElementById("successMessage").style.display = "none";
@@ -845,7 +863,7 @@
 
 보험 시스템 문제로 영문 보험증서 한정 인솔자님 영문성 제외되며, 국문 정상 반영되어 보험 문제 없는 점 참조 바랍니다.
 
-===============================================================
+${messageDivider}
 `;
       }
 
@@ -863,7 +881,7 @@ ${lastProductCode} 상품 행사 관련 서류 전달드립니다.
 FNL 확정서 식당까지 모두 확정되어, 확정일정표 반영해두었습니다. 한글일정표 인쇄 이상없습니다.
 
 ${queenDirectPaymentText}
-===============================================================
+${messageDivider}
 
 ■ 행사 특이사항
 
@@ -881,7 +899,7 @@ nnn 님 초콜릿 1개 <멘트 : >
 
 - 
 
-===============================================================
+${messageDivider}
 
 ${prahaText}
 
@@ -893,7 +911,7 @@ ${prahaText}
 
 출장비 계산 : ${calculationFormulaText}
 
-================================================================================
+${messageDivider}
 
 ■ 공통 서류 안내
 
