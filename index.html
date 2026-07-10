@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>유럽상품1팀 인솔자 출장비 계산기</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #ffffff;
+      color: #111827;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", sans-serif;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 28px 18px 40px;
+    }
+
+    .header {
+      margin-bottom: 28px;
+    }
+
+    .header h1 {
+      font-size: 40px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0 0 18px;
+      line-height: 1.2;
+      letter-spacing: -0.04em;
+    }
+
+    .version {
+      font-size: 13px;
+      color: #8a8f98;
+      margin-bottom: 52px;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #d1d5db;
+      margin: 0 0 32px;
+    }
+
+    .field-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 7px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      height: 42px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      padding: 8px 11px;
+      font-size: 15px;
+      color: #111827;
+      background: #ffffff;
+      outline: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+      border-color: #ff4b4b;
+      box-shadow: 0 0 0 1px #ff4b4b;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 12px 0;
+      font-size: 15px;
+      color: #374151;
+    }
+
+    .checkbox-row input {
+      width: 16px;
+      height: 16px;
+    }
+
+    .balkan-box {
+      display: none;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 14px;
+      margin: 8px 0 18px;
+    }
+
+    .balkan-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin: 22px 0 20px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .primary-button {
+      background: #ff4b4b;
+      color: #ffffff;
+    }
+
+    .secondary-button {
+      background: #374151;
+      color: #ffffff;
+    }
+
+    .result-section {
+      display: none;
+      margin-top: 10px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 22px 0 12px;
+    }
+
+    .result-box {
+      background-color: #EAF7EA;
+      border: 1px solid #B7E0B7;
+      border-radius: 8px;
+      padding: 16px;
+      color: #111111;
+      line-height: 1.7;
+      font-size: 16px;
+      white-space: normal;
+    }
+
+    .message-form {
+      display: none;
+      margin-top: 22px;
+      padding-top: 4px;
+    }
+
+    .success-message {
+      display: none;
+      margin: 16px 0 12px;
+      padding: 10px 12px;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      background: #f0fdf4;
+      color: #166534;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .message-output-section {
+      display: none;
+      margin-top: 14px;
+    }
+
+    .message-output-title {
+      font-size: 30px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-top: 24px;
+      margin-bottom: 24px;
+    }
+
+    .copy-status {
+      margin-left: 10px;
+      color: #16a34a;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .message-box {
+      border: 1px solid #999999;
+      background-color: #ffffff;
+      padding: 12px;
+      width: 100%;
+      height: 520px;
+      overflow: auto;
+      white-space: normal;
+      font-family: Arial, "Malgun Gothic", sans-serif;
+      font-size: 14px;
+      line-height: 1.65;
+      box-sizing: border-box;
+      margin-top: 12px;
+    }
+
+    .message-box strong {
+      font-weight: 800;
+    }
+
+    details {
+      margin-top: 34px;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 18px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: #374151;
+    }
+
+    .patch-note {
+      color: #374151;
+      font-size: 14px;
+      line-height: 1.7;
+      margin-top: 12px;
+      white-space: pre-line;
+    }
+
+    .error-box {
+      display: none;
+      margin: 12px 0;
+      padding: 12px;
+      border-radius: 8px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 22px 14px 32px;
+      }
+
+      .header h1 {
+        font-size: 30px;
+      }
+
+      .version {
+        margin-bottom: 32px;
+      }
+
+      .balkan-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .message-output-title {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <h1>유럽상품1팀 인솔자 출장비 계산기</h1>
+      <div class="version">ver 1.1.0.1</div>
+      <hr class="divider" />
+    </header>
+
+    <section class="calculator">
+      <div class="field-group">
+        <label for="productCode">상품코드 입력</label>
+        <input id="productCode" type="text" maxlength="15" autocomplete="off" />
+      </div>
+
+      <div class="field-group">
+        <label for="days">상품 날짜 수 입력</label>
+        <input id="days" type="number" min="0" step="1" value="9" />
+      </div>
+
+      <div class="field-group">
+        <label for="people">인솔자 제외 인원수</label>
+        <input id="people" type="number" min="0" step="1" value="0" />
+      </div>
+
+      <div class="field-group">
+        <label for="mealExcludedCount">식사 불포함 횟수 입력</label>
+        <input id="mealExcludedCount" type="number" min="0" step="1" value="0" />
+      </div>
+
+      <label class="checkbox-row">
+        <input id="useBalkan" type="checkbox" />
+        <span>발칸 계산 식을 사용하시겠습니까?</span>
+      </label>
+
+      <div id="balkanBox" class="balkan-box">
+        <div class="balkan-grid">
+          <div class="field-group" style="margin-bottom:0;">
+            <label for="balkan12000Days">12,000원 적용 일수</label>
+            <input id="balkan12000Days" type="number" min="0" step="1" value="0" />
+          </div>
+
+          <div class="field-group" style="margin-bottom:0;">
+            <label for="balkan16000Days">16,000원 적용 일수</label>
+            <input id="balkan16000Days" type="number" min="0" step="1" value="0" />
+          </div>
+        </div>
+      </div>
+
+      <label class="checkbox-row">
+        <input id="prahaTour" type="checkbox" />
+        <span>프라하 야간투어 스페셜 포함 상품인가요?</span>
+      </label>
+
+      <label class="checkbox-row">
+        <input id="viennaConcert" type="checkbox" />
+        <span>비엔나 음악회 스페셜 포함 상품인가요?</span>
+      </label>
+
+      <label class="checkbox-row">
+        <input id="earlyDeparture" type="checkbox" />
+        <span>출발편 비행기 탑승 시간이 05:59 이전인가요?</span>
+      </label>
+
+      <label class="checkbox-row">
+        <input id="starLeader" type="checkbox" />
+        <span>스타 인솔자 상품인가요?</span>
+      </label>
+
+      <div id="errorBox" class="error-box"></div>
+
+      <div class="button-row">
+        <button class="primary-button" type="button" onclick="calculate()">계산하기</button>
+        <button id="messageFormButton" class="secondary-button" type="button" onclick="showMessageForm()" style="display:none;">
+          인솔자 쪽지 양식 작성
+        </button>
+      </div>
+
+      <section id="resultSection" class="result-section">
+        <h2 class="section-title">계산 결과</h2>
+        <div id="resultBox" class="result-box"></div>
+      </section>
+
+      <section id="messageForm" class="message-form">
+        <h2 class="section-title">인솔자 쪽지 양식 작성</h2>
+
+        <div class="field-group">
+          <label for="managerName">상품 담당자 이름</label>
+          <input id="managerName" type="text" autocomplete="off" />
+        </div>
+
+        <label class="checkbox-row">
+          <input id="visitPraha" type="checkbox" />
+          <span>프라하를 방문하는 상품인가요?</span>
+        </label>
+
+        <label class="checkbox-row">
+          <input id="visitHallstatt" type="checkbox" />
+          <span>할슈타트를 방문하는 상품인가요?</span>
+        </label>
+
+        <label class="checkbox-row">
+          <input id="queenDirectPayment" type="checkbox" />
+          <span>인솔자에게 퀸투어 직불금이 전달되는 상품인가요?</span>
+        </label>
+
+        <div class="button-row">
+          <button class="primary-button" type="button" onclick="generateMessage()">실행</button>
+        </div>
+      </section>
+
+      <div id="successMessage" class="success-message">
+        인솔자 쪽지 양식이 생성되었습니다.
+      </div>
+
+      <section id="messageOutputSection" class="message-output-section">
+        <h2 class="message-output-title">생성된 인솔자 쪽지 전문</h2>
+
+        <button class="primary-button" type="button" onclick="copyMessage()">복사하기</button>
+        <span id="copyStatus" class="copy-status"></span>
+
+        <div id="messageBox" class="message-box"></div>
+      </section>
+    </section>
+
+    <details>
+      <summary>ver 1.1.0.1 패치노트 보기</summary>
+      <div class="patch-note">1. 패치노트를 확인할 수 있는 기능을 추가했습니다.
+2. 발칸 계산 방식을 수동으로 적용하게 변경했습니다.
+3. 인센티브 코드 계산을 추가했습니다.
+4. 상품코드를 정확히 15자리로 입력하도록 검증을 강화했습니다.
+5. 상품 날짜 수와 인솔자 제외 인원수가 0일/0명일 경우 오류 안내를 추가했습니다.
+6. 발칸 적용 일수 합계 검증을 강화했습니다.
+7. 계산식 항목별 괄호 표시를 적용했습니다.
+8. 인솔자 쪽지 양식 작성 기능을 복구했습니다.
+9. 퀸투어 직불금 전달 여부 체크박스를 추가했습니다.
+10. 상품 날짜 수 기본값을 9일로 변경했습니다.
+11. 체코 방문 여부 문구를 프라하 방문 여부 문구로 변경했습니다.
+12. 인솔자 쪽지 전문 자동 생성 양식을 추가했습니다.
+13. 복사하기 버튼 클릭 시 인솔자 쪽지 전문 전체가 복사되도록 수정했습니다.
+14. 인솔자 쪽지 전문 표시 화면에서 주요 안내 줄을 볼드체로 표시하도록 수정했습니다.
+15. 인솔자 제외 인원수가 15명 이하일 경우 15명으로 보정하여 계산하도록 수정했습니다.
+16. 인솔자 쪽지 전문의 연속 빈 줄을 한 줄로 정리했습니다.
+17. 계산 결과 내 인원 보정 안내 문구가 HTML 코드와 함께 노출되는 문제를 수정했습니다.
+18. 기타 자잘한 수정들을 했습니다.
+
+화이팅입니당</div>
+    </details>
+  </main>
+
+  <script>
+    let calculationFormulaText = "";
+    let lastProductCode = "";
+    let generatedMessageText = "";
+
+    const methodColors = {
+      "일반": "#111111",
+      "인센티브": "#E53935",
+      "스페인일주": "#1E88E5",
+      "발칸": "#43A047"
+    };
+
+    document.getElementById("useBalkan").addEventListener("change", function () {
+      const balkanBox = document.getElementById("balkanBox");
+      balkanBox.style.display = this.checked ? "block" : "none";
+    });
+
+    function getValue(id) {
+      return document.getElementById(id).value;
+    }
+
+    function getIntValue(id) {
+      const value = parseInt(document.getElementById(id).value, 10);
+      if (Number.isNaN(value)) {
+        return 0;
+      }
+      return value;
+    }
+
+    function getChecked(id) {
+      return document.getElementById(id).checked;
+    }
+
+    function formatWon(amount) {
+      return amount.toLocaleString("ko-KR") + "원";
+    }
+
+    function getChar(text, index) {
+      if (text && text.length > index) {
+        return text[index];
+      }
+      return "";
+    }
+
+    function isIncentive(productCode) {
+      return getChar(productCode, 2).toUpperCase() === "Q";
+    }
+
+    function isSpain(productCode) {
+      const prefix = productCode ? productCode.slice(0, 6).toUpperCase() : "";
+      return prefix === "EEP131" || prefix === "EEP117";
+    }
+
+    function isPremium(productCode) {
+      return getChar(productCode, 4) === "1";
+    }
+
+    function getAppliedPeople(people) {
+      if (people <= 15) {
+        return 15;
+      }
+      return people;
+    }
+
+    function buildPeopleAdjustmentText(originalPeople, appliedPeople) {
+      if (originalPeople !== appliedPeople) {
+        return originalPeople + "명은 " + appliedPeople + "명으로 변경하여 적용했습니다.";
+      }
+      return "";
+    }
+
+    function buildMethodMessagePlain(method) {
+      if (method === "인센티브") {
+        return "적용 계산 방식은 " + method + " 입니다. 오늘도 화이팅입니다 화진 수석님";
+      }
+      return "적용 계산 방식은 " + method + " 입니다.";
+    }
+
+    function validateInputs(productCode, days, people, useBalkan, balkan12000Days, balkan16000Days) {
+      if (productCode.trim().length !== 15) {
+        return "상품코드는 반드시 15자리로 입력해주세요.";
+      }
+
+      if (days <= 0) {
+        return "상품 날짜 수가 0일입니다. 상품 날짜 수를 1일 이상으로 입력해주세요.";
+      }
+
+      if (people <= 0) {
+        return "인솔자 제외 인원수가 0명입니다. 인솔자 제외 인원수를 1명 이상으로 입력해주세요.";
+      }
+
+      if (useBalkan) {
+        const totalBalkanDays = balkan12000Days + balkan16000Days;
+
+        if (totalBalkanDays !== days) {
+          return "발칸 적용 일수 합계가 상품 날짜 수와 다릅니다. 현재 발칸 적용 일수 합계는 "
+            + totalBalkanDays
+            + "일이고, 상품 날짜 수는 "
+            + days
+            + "일입니다.";
+        }
+      }
+
+      return null;
+    }
+
+    function calculateMainFee(productCode, days, people, useBalkan, balkan12000Days, balkan16000Days) {
+      const appliedPeople = getAppliedPeople(people);
+      const premium = isPremium(productCode);
+
+      if (isIncentive(productCode)) {
+        return {
+          amount: 250000 * days,
+          formula: "250,000원 * " + days + "일",
+          method: "인센티브",
+          spainPremiumException: false,
+          appliedPeople: appliedPeople
+        };
+      }
+
+      if (isSpain(productCode)) {
+        let mainAmount;
+        let mainFormula;
+
+        if (premium) {
+          mainAmount = 200000 * days;
+          mainFormula = "200,000원 * " + days + "일";
+        } else {
+          mainAmount = 150000 * days;
+          mainFormula = "150,000원 * " + days + "일";
+        }
+
+        return {
+          amount: mainAmount,
+          formula: mainFormula,
+          method: "스페인일주",
+          spainPremiumException: true,
+          appliedPeople: appliedPeople
+        };
+      }
+
+      if (useBalkan) {
+        const amount12000 = 12000 * appliedPeople * balkan12000Days;
+        const amount16000 = 16000 * appliedPeople * balkan16000Days;
+        const mainAmount = amount12000 + amount16000;
+        const formulaParts = [];
+
+        if (balkan12000Days > 0) {
+          formulaParts.push("12,000원 * " + appliedPeople + "명 * " + balkan12000Days + "일");
+        }
+
+        if (balkan16000Days > 0) {
+          formulaParts.push("16,000원 * " + appliedPeople + "명 * " + balkan16000Days + "일");
+        }
+
+        return {
+          amount: mainAmount,
+          formula: formulaParts.join(" + "),
+          method: "발칸",
+          spainPremiumException: false,
+          appliedPeople: appliedPeople
+        };
+      }
+
+      return {
+        amount: 13000 * appliedPeople * days,
+        formula: days + "일 * " + appliedPeople + "명 * 13,000원",
+        method: "일반",
+        spainPremiumException: false,
+        appliedPeople: appliedPeople
+      };
+    }
+
+    function calculateSubFee(productCode, mealExcludedCount, prahaTour, viennaConcert, earlyDeparture, starLeader, spainPremiumException) {
+      let subAmount = 0;
+      const subFormulaParts = [];
+
+      if (isPremium(productCode) && !spainPremiumException) {
+        subAmount += 200000;
+        subFormulaParts.push("프리미엄 200,000원");
+      }
+
+      if (mealExcludedCount > 0) {
+        const mealAmount = 30000 * mealExcludedCount;
+        subAmount += mealAmount;
+        subFormulaParts.push("식사불포함 " + mealExcludedCount + "회 " + formatWon(mealAmount));
+      }
+
+      if (prahaTour) {
+        subAmount += 70000;
+        subFormulaParts.push("프라하야간투어 70,000원");
+      }
+
+      if (viennaConcert) {
+        subAmount += 70000;
+        subFormulaParts.push("비엔나음악회 70,000원");
+      }
+
+      if (earlyDeparture) {
+        subAmount += 50000;
+        subFormulaParts.push("출발편 05:59 이전 50,000원");
+      }
+
+      if (starLeader) {
+        subAmount += 300000;
+        subFormulaParts.push("스타 인솔자 300,000원");
+      }
+
+      return {
+        amount: subAmount,
+        formulaParts: subFormulaParts
+      };
+    }
+
+    function buildFormulaTextPlain(mainFormula, subFormulaParts) {
+      const formulaParts = [];
+      const mainParts = mainFormula.split(" + ");
+
+      mainParts.forEach(function (part) {
+        formulaParts.push("(" + part + ")");
+      });
+
+      subFormulaParts.forEach(function (part) {
+        formulaParts.push("(" + part + ")");
+      });
+
+      return formulaParts.join(" + ");
+    }
+
+    function buildCalculationFormulaText(mainFormula, subFormulaParts, totalAmount) {
+      const formulaText = buildFormulaTextPlain(mainFormula, subFormulaParts);
+      return formulaText + " = " + formatWon(totalAmount);
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function buildMessageDisplayHtml(message) {
+      const boldPrefixes = ["■", "♧", "◐", "★", "※"];
+      const lines = message.split("\n");
+      const htmlLines = [];
+
+      lines.forEach(function (line) {
+        const escapedLine = escapeHtml(line);
+        const trimmedLine = line.trim();
+        const shouldBold = boldPrefixes.some(function (prefix) {
+          return trimmedLine.startsWith(prefix);
+        });
+
+        if (shouldBold) {
+          htmlLines.push("<strong>" + escapedLine + "</strong>");
+        } else {
+          htmlLines.push(escapedLine);
+        }
+      });
+
+      return htmlLines.join("<br>");
+    }
+
+    function normalizeBlankLines(text) {
+      const lines = text.split("\n");
+      const normalizedLines = [];
+      let blankCount = 0;
+
+      lines.forEach(function (line) {
+        if (line.trim() === "") {
+          blankCount += 1;
+
+          if (blankCount <= 1) {
+            normalizedLines.push("");
+          }
+        } else {
+          blankCount = 0;
+          normalizedLines.push(line);
+        }
+      });
+
+      return normalizedLines.join("\n").trim();
+    }
+
+    function showError(message) {
+      const errorBox = document.getElementById("errorBox");
+      errorBox.textContent = message;
+      errorBox.style.display = "block";
+    }
+
+    function clearError() {
+      const errorBox = document.getElementById("errorBox");
+      errorBox.textContent = "";
+      errorBox.style.display = "none";
+    }
+
+    function calculate() {
+      clearError();
+
+      const productCode = getValue("productCode").trim();
+      const days = getIntValue("days");
+      const people = getIntValue("people");
+      const mealExcludedCount = getIntValue("mealExcludedCount");
+      const useBalkan = getChecked("useBalkan");
+      const balkan12000Days = getIntValue("balkan12000Days");
+      const balkan16000Days = getIntValue("balkan16000Days");
+
+      const validationError = validateInputs(
+        productCode,
+        days,
+        people,
+        useBalkan,
+        balkan12000Days,
+        balkan16000Days
+      );
+
+      if (validationError) {
+        showError(validationError);
+        document.getElementById("resultSection").style.display = "none";
+        document.getElementById("messageFormButton").style.display = "none";
+        document.getElementById("messageForm").style.display = "none";
+        document.getElementById("successMessage").style.display = "none";
+        document.getElementById("messageOutputSection").style.display = "none";
+        calculationFormulaText = "";
+        lastProductCode = "";
+        generatedMessageText = "";
+        return;
+      }
+
+      const mainResult = calculateMainFee(
+        productCode,
+        days,
+        people,
+        useBalkan,
+        balkan12000Days,
+        balkan16000Days
+      );
+
+      const subResult = calculateSubFee(
+        productCode,
+        mealExcludedCount,
+        getChecked("prahaTour"),
+        getChecked("viennaConcert"),
+        getChecked("earlyDeparture"),
+        getChecked("starLeader"),
+        mainResult.spainPremiumException
+      );
+
+      const totalAmount = mainResult.amount + subResult.amount;
+      const peopleAdjustmentText = buildPeopleAdjustmentText(people, mainResult.appliedPeople);
+      const formulaText = buildFormulaTextPlain(mainResult.formula, subResult.formulaParts);
+
+      calculationFormulaText = buildCalculationFormulaText(
+        mainResult.formula,
+        subResult.formulaParts,
+        totalAmount
+      );
+
+      lastProductCode = productCode;
+
+      const method = mainResult.method;
+      const methodColor = methodColors[method] || "#111111";
+
+      let resultHtml = "";
+      resultHtml += "<div>적용 계산 방식은 ";
+      resultHtml += "<strong style='color:" + methodColor + ";'>" + escapeHtml(method) + "</strong>";
+      resultHtml += " 입니다.";
+
+      if (method === "인센티브") {
+        resultHtml += " 오늘도 화이팅입니다 화진 수석님";
+      }
+
+      resultHtml += "</div>";
+
+      if (peopleAdjustmentText) {
+        resultHtml += "<div style='margin-top:4px;'>" + escapeHtml(peopleAdjustmentText) + "</div>";
+      }
+
+      resultHtml += "<br>";
+      resultHtml += "<div>출장비 계산 : ";
+      resultHtml += escapeHtml(formulaText);
+      resultHtml += " = <strong>";
+      resultHtml += formatWon(totalAmount);
+      resultHtml += "</strong></div>";
+
+      document.getElementById("resultBox").innerHTML = resultHtml;
+      document.getElementById("resultSection").style.display = "block";
+      document.getElementById("messageFormButton").style.display = "inline-block";
+
+      document.getElementById("messageForm").style.display = "none";
+      document.getElementById("successMessage").style.display = "none";
+      document.getElementById("messageOutputSection").style.display = "none";
+      document.getElementById("copyStatus").textContent = "";
+    }
+
+    function showMessageForm() {
+      if (!calculationFormulaText) {
+        showError("먼저 계산하기를 실행해주세요.");
+        return;
+      }
+
+      clearError();
+      document.getElementById("messageForm").style.display = "block";
+      document.getElementById("messageForm").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
+    function generateMessage() {
+      const managerName = getValue("managerName").trim();
+
+      let queenDirectPaymentText = "";
+
+      if (getChecked("queenDirectPayment")) {
+        queenDirectPaymentText = `※퀸투어 진행상품으로 직불금 2000유로 있습니다.
+
+첨부된 직불금내역서 출력하셔서 지정된 날짜에 11층 자금 지원팀서 수령 부탁드립니다. 
+`;
+      }
+
+      let prahaText = "";
+
+      if (getChecked("visitPraha")) {
+        prahaText = `■  체코 영문 여행자 보험 증서
+
+체코에서 여행자와 불법이민자 구분을 여행자보험 증서로 확인한다 하니 고객분들에게 1부씩 전달 바랍니다.
+
+보험 시스템 문제로 영문 보험증서 한정 인솔자님 영문성 제외되며, 국문 정상 반영되어 보험 문제 없는 점 참조 바랍니다.
+
+===============================================================
+`;
+      }
+
+      let hallstattText = "";
+
+      if (getChecked("visitHallstatt")) {
+        hallstattText = `★ 할슈타트 내 행사 진행 시에는 멘트는 꼭 버스 안에서만 진행해 주시고, 야외에서는 자유 일정으로 진행 부탁드립니다. 야외에서의 가이드 행위가 엄격히 금지되어 있는 지역으로, 가이드 분들이 현지 경찰에 인계되는 사례가 종종 발생하고 있습니다.
+`;
+      }
+
+      let finalMessage = `인솔자님 안녕하세요, 하나투어 유럽상품1팀 ${managerName} 입니다 :)
+
+${lastProductCode} 상품 행사 관련 서류 전달드립니다.
+
+FNL 확정서 식당까지 모두 확정되어, 확정일정표 반영해두었습니다. 한글일정표 인쇄 이상없습니다.
+
+${queenDirectPaymentText}
+===============================================================
+
+■ 행사 특이사항
+
+- 선택관광 선포함자는 총 n명입니다. 
+
+nnn, nnn 님.
+
+- 현지서비스 :  
+
+nnn 님 초콜릿 1개 <멘트 : >
+
+총 : 초콜릿 1개
+
+■ 기타 특이사항
+
+- 
+
+===============================================================
+
+${prahaText}
+
+■ 출장비 안내
+
+♧ 출장비 내역 꼼꼼히 확인 바라며, 출장비는 출발 당일 오전 팀장님 결재가 진행되니 참조 바랍니다.
+
+♧ 출장비 계산 값은 아래와 같으며, 아래 비용에서 세금 3.3%를 제외한 금액이 입금됩니다.
+
+출장비 계산 : ${calculationFormulaText}
+
+================================================================================
+
+■ 공통 서류 안내
+
+현지 행사 진행 시 불가피한 상황으로 면책 동의서, 일정 변경 동의서, 안전사고 매뉴얼, 비상상황 대응 매뉴얼 등에 대한
+
+확인이 필요한 경우 아래 링크를 통해 매뉴얼 지침 출발 전 사전 확인바랍니다. | 다운로드 가능
+
+특히, 일정 순서를 변경하게 되면 일정 변경 동의서를 꼭 받아 귀책 사유가 되지 않도록 주의하시기 바랍니다.
+
+https://drive.google.com/drive/folders/1Tf_4RBZMWziPzlJBWKOim4HfNWok-4L6?usp=sharing
+
+■ 하나투어 여행 개런티 프로그램
+
+일정에 없는 쇼핑, 선택관광, 가이드/기사 경비 지불시 100% 전액 환불 되는 프로그램입니다.
+
+https://www.hanatour.com/promotion/plan/PM006682D66D
+
+개런티 프로그램 숙지 하셔서 일정표에 없는 쇼핑, 선택관광, 팁 요구 등이 발생하지 않도록 주의 바랍니다.
+
+■ 자유 시간 엄수
+
+일정표에 있는 자유 시간은 10~20분 차이가 나더라도 진행 되게 끔 꼭 지켜 주셔야 합니다.
+
+현지 사정에 의해 자유 시간이 줄어들 경우 모든 고객이 인지 할 수 있도록 사전 설명 바랍니다. 
+
+◐ 행사 시 유의 사항 ◑
+
+■ 수신기
+
+출장 전날 문자로 수령 안내가 온다고 합니다.  
+
+분실시 개당 €100 발생되며 분실 비용은 현장 수령하시어 귀국 후 수신기 반납 시 전달하시면 됩니다. 
+
+관련된 주의사항과 분실 비용은 고객분들에게 사전 고지 후 관리 당부 바랍니다.
+
+■ 고객 여권/영문보험증서 지참 확인
+
+■ 호텔 객실 키 추가 반출 금지
+
+현지에서 도둑이 카운터에서 호텔 객실키를 발급 받아 객실로 침입한 사례가 발생했습니다.
+
+프론트 체크인 시 절대객실 키 추가 반출되지 않도록 주의 주시기 바랍니다.
+
+손님들께는 번거로우시겠지만 객실키는 위와 같은 문제로 개별적으로 추가 생성은 불가한 점 안내 바랍니다.
+
+■ 인솔자님께서 하나투어 일정표와 현지 확정서가 동일한 지 꼭 꼼꼼하게 재확인 하셔야만 합니다.
+
+작은 실수가 큰 손해로 이어지지 않도록, 확정표 상 이상하다고 생각되시는 부분 있으시면 꼭 문의 하시고 사전 확인 바랍니다.
+
+${hallstattText}
+
+항상 현장에서 고군분투 해 주시는 인솔자님께 감사드립니다.
+
+이번 팀도 행사 잘 진행 부탁 드리겠습니다.`;
+
+      finalMessage = normalizeBlankLines(finalMessage);
+      generatedMessageText = finalMessage;
+
+      document.getElementById("messageBox").innerHTML = buildMessageDisplayHtml(finalMessage);
+      document.getElementById("successMessage").style.display = "block";
+      document.getElementById("messageOutputSection").style.display = "block";
+      document.getElementById("copyStatus").textContent = "";
+
+      document.getElementById("messageOutputSection").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
+    async function copyMessage() {
+      if (!generatedMessageText.trim()) {
+        showError("먼저 실행 버튼을 눌러 쪽지를 생성해주세요.");
+        return;
+      }
+
+      clearError();
+
+      try {
+        await navigator.clipboard.writeText(generatedMessageText);
+        document.getElementById("copyStatus").textContent = "복사되었습니다.";
+      } catch (error) {
+        const textarea = document.createElement("textarea");
+        textarea.value = generatedMessageText;
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+
+        try {
+          document.execCommand("copy");
+          document.getElementById("copyStatus").textContent = "복사되었습니다.";
+        } catch (copyError) {
+          document.getElementById("copyStatus").textContent = "복사 실패. 직접 드래그해서 복사해주세요.";
+        }
+
+        document.body.removeChild(textarea);
+      }
+    }
+  </script>
+</body>
+</html>
