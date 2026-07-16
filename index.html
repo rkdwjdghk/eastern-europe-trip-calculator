@@ -292,7 +292,7 @@
   <main class="page">
     <header class="header">
       <h1><span class="title-logo">✈️</span>유럽상품1팀 인솔자 출장비 계산기</h1>
-      <div class="version">ver 1.1.1.1</div>
+      <div class="version">ver 1.1.2.0</div>
       <hr class="divider" />
     </header>
 
@@ -416,6 +416,11 @@
     </section>
 
     <details>
+      <summary>ver 1.1.2.0 패치노트 보기 (26.07.16)</summary>
+      <div class="patch-note">1. 계산 오류들을 전반적으로 수정했습니다.</div>
+    </details>
+
+    <details>
       <summary>ver 1.1.1.1 패치노트 보기</summary>
       <div class="patch-note">1. 기존 로딩이 필요했던 PYTHON 환경이 아닌, HTML 환경에서 구동됩니다.
 2. 패치노트를 최하단에 추가했습니다.
@@ -495,6 +500,13 @@
       return people;
     }
 
+    function getGeneralUnitPrice(people) {
+      if (people > 20) {
+        return 12000;
+      }
+      return 13000;
+    }
+
     function buildPeopleAdjustmentText(originalPeople, appliedPeople) {
       if (originalPeople !== appliedPeople) {
         return originalPeople + "명은 " + appliedPeople + "명으로 변경하여 적용했습니다.";
@@ -504,7 +516,7 @@
 
     function buildMethodMessagePlain(method) {
       if (method === "인센티브") {
-        return "적용 계산 방식은 " + method + " 입니다. 오늘도 화이팅입니다 화진 수석님";
+        return "적용 계산 방식은 " + method + " 입니다. 오늘도 화이팅입니다 화진수석님☺️";
       }
       return "적용 계산 방식은 " + method + " 입니다.";
     }
@@ -537,78 +549,94 @@
       return null;
     }
 
-    function calculateMainFee(productCode, days, people, useBalkan, balkan12000Days, balkan16000Days) {
-      const appliedPeople = getAppliedPeople(people);
-      const premium = isPremium(productCode);
-
-      if (isIncentive(productCode)) {
+    function calculateSpainMainFee(productCode, days, appliedPeople) {
+      if (isPremium(productCode)) {
         return {
-          amount: 250000 * days,
-          formula: "250,000원 * " + days + "일",
-          method: "인센티브",
-          spainPremiumException: false,
-          appliedPeople: appliedPeople
-        };
-      }
-
-      if (isSpain(productCode)) {
-        let mainAmount;
-        let mainFormula;
-
-        if (premium) {
-          mainAmount = 200000 * days;
-          mainFormula = "200,000원 * " + days + "일";
-        } else {
-          mainAmount = 150000 * days;
-          mainFormula = "150,000원 * " + days + "일";
-        }
-
-        return {
-          amount: mainAmount,
-          formula: mainFormula,
+          amount: 200000 * days,
+          formula: "200,000원 * " + days + "일",
           method: "스페인일주",
-          spainPremiumException: true,
-          appliedPeople: appliedPeople
-        };
-      }
-
-      if (useBalkan) {
-        const amount12000 = 12000 * appliedPeople * balkan12000Days;
-        const amount16000 = 16000 * appliedPeople * balkan16000Days;
-        const mainAmount = amount12000 + amount16000;
-        const formulaParts = [];
-
-        if (balkan12000Days > 0) {
-          formulaParts.push("12,000원 * " + appliedPeople + "명 * " + balkan12000Days + "일");
-        }
-
-        if (balkan16000Days > 0) {
-          formulaParts.push("16,000원 * " + appliedPeople + "명 * " + balkan16000Days + "일");
-        }
-
-        return {
-          amount: mainAmount,
-          formula: formulaParts.join(" + "),
-          method: "발칸",
-          spainPremiumException: false,
+          includePremiumSubFee: false,
           appliedPeople: appliedPeople
         };
       }
 
       return {
-        amount: 13000 * appliedPeople * days,
-        formula: days + "일 * " + appliedPeople + "명 * 13,000원",
-        method: "일반",
-        spainPremiumException: false,
+        amount: 150000 * days,
+        formula: "150,000원 * " + days + "일",
+        method: "스페인일주",
+        includePremiumSubFee: false,
         appliedPeople: appliedPeople
       };
     }
 
-    function calculateSubFee(productCode, mealExcludedCount, prahaTour, viennaConcert, earlyDeparture, starLeader, spainPremiumException) {
+    function calculateIncentiveMainFee(days, appliedPeople) {
+      return {
+        amount: 250000 * days,
+        formula: "250,000원 * " + days + "일",
+        method: "인센티브",
+        includePremiumSubFee: true,
+        appliedPeople: appliedPeople
+      };
+    }
+
+    function calculateBalkanMainFee(appliedPeople, balkan12000Days, balkan16000Days) {
+      const amount12000 = 12000 * appliedPeople * balkan12000Days;
+      const amount16000 = 16000 * appliedPeople * balkan16000Days;
+      const mainAmount = amount12000 + amount16000;
+      const formulaParts = [];
+
+      if (balkan12000Days > 0) {
+        formulaParts.push("12,000원 * " + appliedPeople + "명 * " + balkan12000Days + "일");
+      }
+
+      if (balkan16000Days > 0) {
+        formulaParts.push("16,000원 * " + appliedPeople + "명 * " + balkan16000Days + "일");
+      }
+
+      return {
+        amount: mainAmount,
+        formula: formulaParts.join(" + "),
+        method: "발칸",
+        includePremiumSubFee: true,
+        appliedPeople: appliedPeople
+      };
+    }
+
+    function calculateGeneralMainFee(days, people, appliedPeople) {
+      const generalUnitPrice = getGeneralUnitPrice(people);
+
+      return {
+        amount: generalUnitPrice * appliedPeople * days,
+        formula: days + "일 * " + appliedPeople + "명 * " + generalUnitPrice.toLocaleString("ko-KR") + "원",
+        method: "일반",
+        includePremiumSubFee: true,
+        appliedPeople: appliedPeople
+      };
+    }
+
+    function calculateMainFee(productCode, days, people, useBalkan, balkan12000Days, balkan16000Days) {
+      const appliedPeople = getAppliedPeople(people);
+
+      if (isSpain(productCode)) {
+        return calculateSpainMainFee(productCode, days, appliedPeople);
+      }
+
+      if (isIncentive(productCode)) {
+        return calculateIncentiveMainFee(days, appliedPeople);
+      }
+
+      if (useBalkan) {
+        return calculateBalkanMainFee(appliedPeople, balkan12000Days, balkan16000Days);
+      }
+
+      return calculateGeneralMainFee(days, people, appliedPeople);
+    }
+
+    function calculateSubFee(productCode, mealExcludedCount, prahaTour, viennaConcert, earlyDeparture, starLeader, includePremiumSubFee) {
       let subAmount = 0;
       const subFormulaParts = [];
 
-      if (isPremium(productCode) && !spainPremiumException) {
+      if (isPremium(productCode) && includePremiumSubFee) {
         subAmount += 200000;
         subFormulaParts.push("프리미엄 200,000원");
       }
@@ -778,7 +806,7 @@
         getChecked("viennaConcert"),
         getChecked("earlyDeparture"),
         getChecked("starLeader"),
-        mainResult.spainPremiumException
+        mainResult.includePremiumSubFee
       );
 
       const totalAmount = mainResult.amount + subResult.amount;
@@ -802,7 +830,7 @@
       resultHtml += " 입니다.";
 
       if (method === "인센티브") {
-        resultHtml += " 오늘도 화이팅입니다 화진 수석님";
+        resultHtml += " 오늘도 화이팅입니다 화진수석님☺️";
       }
 
       resultHtml += "</div>";
