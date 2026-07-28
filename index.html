@@ -292,7 +292,7 @@
   <main class="page">
     <header class="header">
       <h1><span class="title-logo">✈️</span>유럽상품1팀 인솔자 출장비 계산기</h1>
-      <div class="version">ver 1.1.2.0</div>
+      <div class="version">ver 1.1.3.0</div>
       <hr class="divider" />
     </header>
 
@@ -376,11 +376,6 @@
       <section id="messageForm" class="message-form">
         <h2 class="section-title">인솔자 쪽지 양식 작성</h2>
 
-        <div class="field-group">
-          <label for="managerName">상품 담당자 이름</label>
-          <input id="managerName" type="text" autocomplete="off" />
-        </div>
-
         <label class="checkbox-row">
           <input id="visitPraha" type="checkbox" />
           <span>프라하를 방문하는 상품인가요?</span>
@@ -416,12 +411,17 @@
     </section>
 
     <details>
-      <summary>ver 1.1.2.0 패치노트 보기 (26.07.16)</summary>
+      <summary>ver 1.1.3.0 패치노트 (26.07.28)</summary>
+      <div class="patch-note">1. 정보보호팀 보안성 검토 결과를 반영하여, 담당자 이름을 쓰는 칸을 삭제했습니다.</div>
+    </details>
+
+    <details>
+      <summary>ver 1.1.2.0 패치노트 (26.07.16)</summary>
       <div class="patch-note">1. 계산 오류들을 전반적으로 수정했습니다.</div>
     </details>
 
     <details>
-      <summary>ver 1.1.1.1 패치노트 보기</summary>
+      <summary>ver 1.1.1.1 패치노트</summary>
       <div class="patch-note">1. 기존 로딩이 필요했던 PYTHON 환경이 아닌, HTML 환경에서 구동됩니다.
 2. 패치노트를 최하단에 추가했습니다.
 3. 발칸 계산 방식을 적용하는 법을 자동에서 수동으로 변경했습니다.
@@ -512,13 +512,6 @@
         return originalPeople + "명은 " + appliedPeople + "명으로 변경하여 적용했습니다.";
       }
       return "";
-    }
-
-    function buildMethodMessagePlain(method) {
-      if (method === "인센티브") {
-        return "적용 계산 방식은 " + method + " 입니다. 오늘도 화이팅입니다 화진수석님☺️";
-      }
-      return "적용 계산 방식은 " + method + " 입니다.";
     }
 
     function validateInputs(productCode, days, people, useBalkan, balkan12000Days, balkan16000Days) {
@@ -871,8 +864,6 @@
     }
 
     function generateMessage() {
-      const managerName = getValue("managerName").trim();
-
       let queenDirectPaymentText = "";
 
       if (getChecked("queenDirectPayment")) {
@@ -902,7 +893,7 @@ ${messageDivider}
 `;
       }
 
-      let finalMessage = `인솔자님 안녕하세요, 하나투어 유럽상품1팀 ${managerName} 입니다 :)
+      let finalMessage = `인솔자님 안녕하세요 :)
 
 ${lastProductCode} 상품 행사 관련 서류 전달드립니다.
 
