@@ -300,7 +300,7 @@
       <div class="field-group">
         <label for="productCode">상품코드 입력</label>
         <input id="productCode" type="text" maxlength="15" autocomplete="off"
-               oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '')" />
+       oninput="this.value = this.value.replace(/[a-z]/g, function (char) { return char.toUpperCase(); })" />
       </div>
 
       <div class="field-group">
